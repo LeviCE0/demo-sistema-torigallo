@@ -12,13 +12,13 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BarChart = () => {
+const BarChart = ({ monthlySalesData }) => {
   const data = {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+    labels: monthlySalesData.map(item => item.month), // Extrae los meses del arreglo de datos
     datasets: [
       {
         label: 'Ventas del Mes',
-        data: [12000, 19000, 3000, 5000, 2000, 30000],
+        data: monthlySalesData.map(item => item.total), // Extrae los totales del arreglo de datos
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
