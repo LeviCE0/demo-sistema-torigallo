@@ -5,7 +5,7 @@ import Login from '../pages/users/Login';
 import Principal from '../pages/Principal';
 import Reservas from '../pages/GestionReservas';
 import GestionMesas from '../pages/GestionMesas';
-import GestionVentas from '../pages/GestionVentas';
+import GestionAtencion from '../pages/GestionAtencion';
 import ProtectedLayout from '../components/ProtectedLayout';
 import Pedido from '../pages/Pedidos';
 
@@ -25,7 +25,7 @@ function AppRoutes() {
         <Route path="/principal" element={<Principal />} />
         <Route path="/gestionMesas" element={<GestionMesas />} />
         <Route path="/gestionReservas" element={<Reservas />} />
-        <Route path="/gestionVentas" element={<GestionVentas />} />
+        <Route path="/gestionAtencion" element={<GestionAtencion />} />
         <Route path="/pedido/:id" element={<Pedido />} />
       </Route>
     </Routes>

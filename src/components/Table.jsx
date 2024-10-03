@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ReservasTable = ({ columns, data }) => {
+const Table = ({ columns, data }) => {
     return (
         <table className="table-main">
             <thead>
@@ -29,4 +29,4 @@ const ReservasTable = ({ columns, data }) => {
     );
 };
 
-export default ReservasTable;
+export default Table;

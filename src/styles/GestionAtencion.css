@@ -1,0 +1,15 @@
+.atencion-container {
+  padding: 20px;
+}
+
+.title-page {
+  font-size: 35px;
+}
+
+.cards-dashboards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+  padding: 20px;
+}

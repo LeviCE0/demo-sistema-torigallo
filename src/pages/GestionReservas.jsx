@@ -3,6 +3,7 @@ import '../styles/GestionReservas.css';
 import Modal from '../components/Modal';
 import ModalForm from '../components/ModalForm';
 import Loading from '../components/Loading';
+import Table from '../components/Table'; // Importa tu componente de tabla
 
 function Reservas() {
     const [formData, setFormData] = useState({
@@ -106,43 +107,6 @@ function Reservas() {
         setShowModalForm(false); // Cerrar el modal
     };
 
-    const ReservasTable = () => {
-        return (
-            <table className="reservas-table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>DNI</th>
-                        <th>Email</th>
-                        <th>Celular</th>
-                        <th>Fecha</th>
-                        <th>Turno</th>
-                        <th>Mesas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {reservas.length > 0 ? (
-                        reservas.map((reserva, index) => (
-                            <tr key={index}>
-                                <td>{reserva.nombre}</td>
-                                <td>{reserva.dni}</td>
-                                <td>{reserva.email}</td>
-                                <td>{reserva.celular}</td>
-                                <td>{reserva.fecha}</td>
-                                <td>{reserva.turno}</td>
-                                <td>{reserva.mesas ? reserva.mesas : 'N/A'}</td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="7">No hay reservas disponibles.</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        );
-    };
-
     const fetchReservas = async () => {
         setIsLoading(true);
         try {
@@ -169,7 +133,7 @@ function Reservas() {
             {isLoading ? (
                 <Loading />
             ) : (
-                <ReservasTable columns={columns} data={reservas} />
+                <Table columns={columns} data={reservas} />
             )}
 
             <button className="reservar-button" onClick={() => setShowModalForm(true)}>Crear Reserva</button>
