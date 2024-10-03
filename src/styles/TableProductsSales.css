@@ -1,0 +1,22 @@
+.table-products-sales {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table-products-sales th {
+    background-color: #ADD8E6;
+    text-align: left;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.table-products-sales td {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.table-products-sales tr:hover td {
+    background-color: #E0FFFF;
+}

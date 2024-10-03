@@ -1,8 +1,7 @@
-// src/pages/GestionVentas.js
 import React from 'react';
-import BarChart from '../components/BarChart';  // Asegúrate de ajustar la ruta si es necesario
-import PieChart from '../components/PieChart';  // Asegúrate de ajustar la ruta si es necesario
-import '../styles/GestionVentas.css'; // Archivo de estilos opcional
+import BarChart from '../components/BarChart';
+import PieChart from '../components/PieChart';
+import '../styles/GestionVentas.css';
 
 function GestionVentas() {
 

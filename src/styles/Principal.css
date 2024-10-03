@@ -16,3 +16,28 @@
 .menu-hidden {
     margin-left: 0;
 }
+
+.cards-dashboards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.charts-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.chart {
+    width: 45%;
+}
+
+.table-products-container {
+    padding: 20px;
+}
+
+h3 {
+    font-size: 25px;
+}
