@@ -17,7 +17,7 @@ function Principal() {
   return (
     isAuthenticated && (
       <div className="principal-container">
-        <h1>Bienvenido al Sistema de Gestión de Torigallo</h1>
+        <h1>Bienvenido/a</h1>
       </div>
     )
   );

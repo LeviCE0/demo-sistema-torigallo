@@ -1,0 +1,55 @@
+/* src/styles/Modal.css */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modalComment-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 350px;
+    height: 250px;
+    text-align: center;
+}
+
+.modalComment-content p {
+    margin-bottom: 20px;
+}
+
+.modalComment-content button {
+    padding: 10px 20px;
+    background-color: rgb(209, 87, 87);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.modalComment-content button:hover {
+    background-color: rgb(212, 20, 20);
+}
+
+textarea {
+    resize: none;
+    width: 300px;
+    height: 120px;
+    font-size: 16px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+}

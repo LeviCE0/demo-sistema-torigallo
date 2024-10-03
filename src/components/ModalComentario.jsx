@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/Modal.css';
+import '../styles/ModalComentario.css';
 
 function ModalComentario({ onSubmit, onClose }) {
   const [comentario, setComentario] = useState('');
@@ -14,15 +14,18 @@ function ModalComentario({ onSubmit, onClose }) {
 
   return (
     <div className="modal">
-      <div className="modal-content">
+      <div className="modalComment-content">
         <h3>Cancelar Atención</h3>
         <textarea
           value={comentario}
           onChange={(e) => setComentario(e.target.value)}
           placeholder="Escribe el motivo de la cancelación"
+          maxLength={250}
         />
-        <button onClick={manejarEnvio}>Enviar</button>
-        <button onClick={onClose}>Cerrar</button>
+        <div className='button-container'>
+          <button style={{backgroundColor:'green'}} onClick={manejarEnvio}>Enviar</button>
+          <button style={{backgroundColor:'red'}} onClick={onClose}>Cerrar</button>
+        </div>
       </div>
     </div>
   );
