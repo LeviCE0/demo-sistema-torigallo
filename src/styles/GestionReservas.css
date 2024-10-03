@@ -58,57 +58,67 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  max-width: 400px;
+  width: 90%;
   text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* MEDIA QUERIES PARA RESPONSIVIDAD */
 @media (max-width: 768px) {
   .reservas-container {
-      width: 95%;
-      padding: 10px;
+    width: 95%;
+    padding: 10px;
   }
 
   .form-group input,
   .form-group select {
-      font-size: 14px;
+    font-size: 14px;
   }
 
   .reservar-button {
-      font-size: 14px;
-      padding: 10px 16px;
+    font-size: 14px;
+    padding: 10px 16px;
   }
+
+  .modal-content {
+    max-width: 350px;
+  }
+
 }
 
 @media (max-width: 480px) {
   .reservas-container {
-      padding: 5px;
+    padding: 5px;
   }
 
   .form-group input,
   .form-group select {
-      font-size: 12px;
+    font-size: 12px;
   }
 
   .reservar-button {
-      font-size: 12px;
-      padding: 8px 12px; 
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .modal-content {
+    max-width: 300px;
   }
 }
 
-
 /* Estilos para la tabla */
 .reservas-table {
-  width: 100%; /* La tabla ocupará el 100% del ancho de su contenedor */
-  border-collapse: collapse; /* Esto asegura que las celdas estén pegadas sin espacio entre ellas */
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
-  border-radius: 15px; /* Bordes redondeados de 15px para la tabla */
+  border-radius: 15px;
 }
 
 .reservas-table th,
@@ -116,7 +126,7 @@
   border: 2px solid #946060;
   padding: 12px;
   text-align: left;
-  box-sizing: border-box; /* Asegura que el padding no afecte al ancho total */
+  box-sizing: border-box;
 }
 
 .reservas-table th {
@@ -131,17 +141,19 @@
 
 /* Hacer la tabla responsive */
 @media (max-width: 768px) {
+
   .reservas-table th,
   .reservas-table td {
-      font-size: 14px;
-      padding: 8px; /* Reducir el padding en pantallas pequeñas */
+    font-size: 14px;
+    padding: 8px;
   }
 }
 
 @media (max-width: 480px) {
+
   .reservas-table th,
   .reservas-table td {
-      font-size: 12px;
-      padding: 6px;
+    font-size: 12px;
+    padding: 6px;
   }
 }
