@@ -1,0 +1,45 @@
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  width: 180px;
+  height: 150px;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+
+.status-container {
+  margin-top: 10px;
+}
+
+.btn-atender {
+  background-color: #a3d9a5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-atender:hover {
+  background-color: #81c784;
+}

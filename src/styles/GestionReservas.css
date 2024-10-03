@@ -1,0 +1,147 @@
+.reservas-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.reservas-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.reservar-button {
+  padding: 12px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 35px;
+}
+
+.reservar-button:hover {
+  background-color: #45a049;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* MEDIA QUERIES PARA RESPONSIVIDAD */
+@media (max-width: 768px) {
+  .reservas-container {
+      width: 95%;
+      padding: 10px;
+  }
+
+  .form-group input,
+  .form-group select {
+      font-size: 14px;
+  }
+
+  .reservar-button {
+      font-size: 14px;
+      padding: 10px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservas-container {
+      padding: 5px;
+  }
+
+  .form-group input,
+  .form-group select {
+      font-size: 12px;
+  }
+
+  .reservar-button {
+      font-size: 12px;
+      padding: 8px 12px; 
+  }
+}
+
+
+/* Estilos para la tabla */
+.reservas-table {
+  width: 100%; /* La tabla ocupará el 100% del ancho de su contenedor */
+  border-collapse: collapse; /* Esto asegura que las celdas estén pegadas sin espacio entre ellas */
+  margin-top: 20px;
+  border-radius: 15px; /* Bordes redondeados de 15px para la tabla */
+}
+
+.reservas-table th,
+.reservas-table td {
+  border: 2px solid #946060;
+  padding: 12px;
+  text-align: left;
+  box-sizing: border-box; /* Asegura que el padding no afecte al ancho total */
+}
+
+.reservas-table th {
+  background-color: rgb(170, 68, 42);
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+}
+
+.reservas-table tr:hover {
+  background-color: #f1b3b3;
+}
+
+/* Hacer la tabla responsive */
+@media (max-width: 768px) {
+  .reservas-table th,
+  .reservas-table td {
+      font-size: 14px;
+      padding: 8px; /* Reducir el padding en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .reservas-table th,
+  .reservas-table td {
+      font-size: 12px;
+      padding: 6px;
+  }
+}

@@ -1,0 +1,18 @@
+.principal-container {
+    display: flex;
+    padding: 20px;
+}
+
+.main-content {
+    padding: 20px;
+    flex-grow: 1;
+    transition: margin-left 0.3s ease;
+}
+
+.menu-visible {
+    margin-left: 250px;
+}
+
+.menu-hidden {
+    margin-left: 0;
+}

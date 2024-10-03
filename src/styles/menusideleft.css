@@ -1,0 +1,142 @@
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+.menu-side-left {
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(to bottom, #ffffff, #f3d6d6, #f5b1b1, #db7373);
+    color: #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: width 0.3s ease;
+}
+
+.menu-side-left.visible {
+    opacity: 1;
+    pointer-events: auto;
+    animation: slideIn 0.5s forwards;
+}
+
+.menu-side-left.hidden {
+    opacity: 0;
+    pointer-events: none;
+    animation: slideOut 0.5s forwards;
+}
+
+.menu-side-left .logo {
+    margin-bottom: 20px;
+    width: 200px;
+    height: 200px;
+}
+
+.menu-side-left .logo-head {
+    padding-top: 50px;
+}
+
+.navbar {
+    width: 240px;
+    align-items: center;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar li {
+    width: 100%;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.navbar a {
+    margin: 10px 0px;
+    color: #a03c3c;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0px;
+    width: 100%;
+    transition: background-color 0.3s ease, border-left 0.3s ease;
+    font-weight: bold;
+    align-items: center;
+}
+
+a:hover {
+    background-color: #f0f0f0;
+    border-radius: 18px;
+    color: #000000;
+}
+
+.menu-toggle-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.main-content {
+    margin-left: 0;
+    padding: 0;
+    transition: margin-left 0.3s ease;
+}
+
+.menu-visible .main-content {
+    margin-left: 250px;
+}
+
+.menu-hidden .main-content {
+    margin-left: 45px;
+}
+
+.logout-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #cf2d2d;
+    cursor: pointer;
+    margin-top: 50px;
+    padding: 10px 0;
+    background-color: #f5b1b1;
+    border-radius: 18px;
+    width: 90%;
+}
+
+.logout-button:hover {
+    background-color: #df7f7f;
+    color: #000000;
+}

@@ -1,0 +1,84 @@
+/* Estilo general para el fondo */
+.body-login {
+    background-image: url('../../assets/fondo_login.jpg');
+    /* Agrega 'url()' y revisa la ruta */
+    background-size: cover;
+    /* Asegura que la imagen cubra todo el fondo */
+    background-position: center;
+    /* Centra la imagen */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del login centrado */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Estilos para el cuadro de login */
+.login-box {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+}
+
+/* Estilos para el título */
+.login-box h1 {
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Estilos para los campos de entrada */
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 16px;
+    max-width: 280px;
+}
+
+/* Añadir espacio entre el último input y el botón */
+.login-box input[type="password"] {
+    margin-bottom: 20px;
+}
+
+/* Estilos para el botón de inicio de sesión */
+.login-box button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    width: 50%;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-box button:hover {
+    background-color: #555;
+}
+
+.logo {
+    max-width: 250px;
+    max-height: 250px;
+}
