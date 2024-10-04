@@ -4,7 +4,7 @@ import { AuthContext } from '../components/AuthContext';
 import BarChart from '../components/BarChart';
 import PieChart from '../components/PieChart';
 import CardDashboard from '../components/CardDashboard';
-import Table from '../components/Table';
+import Table from '../components/Table'; // Importar el componente Table
 import '../styles/Principal.css';
 
 import iconVentas from '../assets/icon-ventas.png';
@@ -14,38 +14,40 @@ function Principal() {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [productos, setProductos] = useState([]);
-  const [totalProductos, setTotalProductos] = useState(0);
-  const [paginaActual, setPaginaActual] = useState(1);
-  const tamanoPagina = 10;
+  const [productos, setProductos] = useState([]); // Estado para almacenar productos
   const [ventasAnimadas, setVentasAnimadas] = useState(0);
   const [pedidosAnimados, setPedidosAnimados] = useState(0);
   const [datosVentasMensuales, setDatosVentasMensuales] = useState([]);
-  const [conteoPedidosMensuales, setConteoPedidosMensuales] = useState(0);
+  const [conteoPedidosMensuales, setConteoPedidosMensuales] = useState([]);
   const [haAnimado, setHaAnimado] = useState(false);
+  const [haCargadoGraficos, setHaCargadoGraficos] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/');
     } else {
-      obtenerProductosMasVendidos();
-      obtenerDatosVentasMensuales();
-      obtenerConteoPedidosMensuales();
+      // Cargar datos de productos y gráficos solo si no han sido cargados antes
+      if (!haCargadoGraficos) {
+        obtenerDatosVentasMensuales();
+        obtenerConteoPedidosMensuales();
+        obtenerProductos(); // Llamar a la función para obtener productos
+        setHaCargadoGraficos(true);
+      }
 
+      // Animar conteo solo si no ha animado antes
       if (!haAnimado) {
         obtenerDatosDashboard();
         setHaAnimado(true);
       }
     }
-  }, [isAuthenticated, navigate, paginaActual]);
+  }, [isAuthenticated, navigate, haCargadoGraficos]);
 
-  const obtenerProductosMasVendidos = async () => {
+  const obtenerProductos = async () => {
     try {
-      const response = await fetch(`https://santamariahoteles.com/torigallo/backend/products_sales.php?page=${paginaActual}&pageSize=${tamanoPagina}`);
+      const response = await fetch('https://santamariahoteles.com/torigallo/backend/products_sales.php');
       if (!response.ok) throw new Error('Error al obtener productos');
       const data = await response.json();
-      setProductos(data.products);
-      setTotalProductos(data.total);
+      setProductos(data.products); // Ajusta esto según la estructura de tu API
     } catch (error) {
       console.error('Error obteniendo productos:', error);
     }
@@ -99,21 +101,7 @@ function Principal() {
     }, 10);
   };
 
-  const totalPaginas = Math.ceil(totalProductos / tamanoPagina);
-
-  const manejarSiguientePagina = () => {
-    if (paginaActual < totalPaginas) {
-      setPaginaActual(paginaActual + 1);
-    }
-  };
-
-  const manejarPaginaAnterior = () => {
-    if (paginaActual > 1) {
-      setPaginaActual(paginaActual - 1);
-    }
-  };
-
-  const columnasProductos = ['Producto', 'Cantidad Vendida'];
+  const columnasProductos = ['Producto', 'Categoria', 'CantidadVendida'];
 
   return (
     isAuthenticated && (
@@ -126,13 +114,8 @@ function Principal() {
           <CardDashboard title="Pedidos del Mes Actual" value={pedidosAnimados} image={iconPedidos} className="pedidos" />
         </div>
         <div className='table-products-container'>
-          <h3>Productos Más Vendidos</h3>
-          <Table columns={columnasProductos} data={productos} /> 
-          <div className="pagination">
-            <button onClick={manejarPaginaAnterior} disabled={paginaActual === 1}>Anterior</button>
-            <span>Página {paginaActual} de {totalPaginas}</span>
-            <button onClick={manejarSiguientePagina} disabled={paginaActual === totalPaginas}>Siguiente</button>
-          </div>
+          <h3>Productos Mas Vendidos</h3>
+          <Table columns={columnasProductos} data={productos} />
         </div>
         <div className="charts-container">
           <div className="chart">

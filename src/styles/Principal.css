@@ -73,3 +73,10 @@ h3 {
     background-color: #c0c0c0;
     cursor: not-allowed;
 }
+
+.filter-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
