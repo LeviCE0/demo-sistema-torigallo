@@ -22,7 +22,7 @@ function Reservas() {
     const [reservas, setReservas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const columns = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Turno', 'Mesas'];
+    const columns = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Turno', 'Mesas', 'Acciones'];
 
     const handleChange = (e) => {
         setFormData({
@@ -35,7 +35,7 @@ function Reservas() {
         e.preventDefault();
 
         try {
-            const response = await fetch('https://santamariahoteles.com/torigallo/backend/verify_mesas.php', {
+            const response = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/verify_mesas.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function Reservas() {
                 const data = await response.json();
 
                 if (data.success && data.mesas.length > 0) {
-                    const reservaResponse = await fetch('https://santamariahoteles.com/torigallo/backend/create_reservas.php', {
+                    const reservaResponse = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/create_reservas.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ function Reservas() {
                             celular: formData.celular,
                             fecha: formData.fecha,
                             turno: formData.turno,
-                            mesas: data.mesas,
+                            mesas: data.mesas.map(mesa => mesa.id), // Extraer solo los IDs de las mesas
                         }),
                     });
 
@@ -110,7 +110,7 @@ function Reservas() {
     const fetchReservas = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('https://santamariahoteles.com/torigallo/backend/get_reservas.php');
+            const response = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/get_reservas.php');
             if (response.ok) {
                 const data = await response.json();
                 setReservas(data.reservas);
@@ -123,6 +123,35 @@ function Reservas() {
         setIsLoading(false);
     };
 
+    const handleDelete = async (reservaId) => {
+        try {
+            const response = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/delete_reserva.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ reserva_id: reservaId }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    setModalMessage('Reserva eliminada exitosamente');
+                    fetchReservas(); // Actualizar la lista de reservas
+                } else {
+                    setModalMessage('Error al eliminar la reserva');
+                }
+            } else {
+                setModalMessage('Error: No se pudo eliminar la reserva.');
+            }
+        } catch (error) {
+            console.error("Error en la solicitud de eliminación:", error);
+            setModalMessage('Error en la solicitud de eliminación.');
+        }
+
+        setShowModalMessage(true);
+    };
+
     useEffect(() => {
         fetchReservas();
     }, []);
@@ -133,7 +162,20 @@ function Reservas() {
             {isLoading ? (
                 <Loading />
             ) : (
-                <Table columns={columns} data={reservas} />
+                <Table 
+                    columns={columns} 
+                    data={reservas.map(reserva => ({
+                        ...reserva,
+                        Acciones: (
+                            <button 
+                                className="delete-button" 
+                                onClick={() => handleDelete(reserva.id)}
+                            >
+                                Eliminar
+                            </button>
+                        )
+                    }))}
+                />
             )}
 
             <button className="reservar-button" onClick={() => setShowModalForm(true)}>Crear Reserva</button>

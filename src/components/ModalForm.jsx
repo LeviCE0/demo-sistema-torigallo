@@ -82,7 +82,7 @@ function ModalForm({ formData, handleChange, handleSubmit, closeModalForm }) {
                             value={formData.email}
                             onChange={handleFieldChange}
                             required
-                            pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$"
+                            pattern="^[a-zA-Z0-9._%+-]+@(gmail.com|hotmail.com|outlook.com)$"
                             title="Por favor, ingrese un correo electrónico válido (gmail.com, hotmail.com, outlook.com)."
                         />
                     </div>
