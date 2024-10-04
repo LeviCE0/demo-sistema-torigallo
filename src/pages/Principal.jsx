@@ -122,7 +122,7 @@ function Principal() {
           <h1>Bienvenido/a</h1>
         </div>
         <div className='cards-dashboards'>
-          <CardDashboard title="Ventas del Mes Actual" value={`$${ventasAnimadas}`} image={iconVentas} className="ventas" />
+          <CardDashboard title="Ventas del Mes Actual" value={`S/ ${ventasAnimadas}`} image={iconVentas} className="ventas" />
           <CardDashboard title="Pedidos del Mes Actual" value={pedidosAnimados} image={iconPedidos} className="pedidos" />
         </div>
         <div className='table-products-container'>

@@ -19,7 +19,6 @@ const PieChart = ({ ordersData }) => {
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
 
-    // Cambia `order.mes` para usar el nombre del mes
     const labels = ordersData.map(order => meses[parseInt(order.mes) - 1]); // -1 porque el índice del arreglo comienza en 0
 
     const data = ordersData.map(order => parseInt(order.totalPedidos)); // Convierte totalPedidos a número

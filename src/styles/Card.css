@@ -5,8 +5,8 @@
   padding: 20px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
-  width: 180px;
-  height: 150px;
+  width: 230px; /* Aumenta el ancho */
+  height: 180px; /* Aumenta la altura */
 }
 
 .card:hover {
@@ -42,4 +42,24 @@
 
 .btn-atender:hover {
   background-color: #81c784;
+}
+
+.button-container {
+  display: flex;        /* Usar flexbox para alinear los botones en línea */
+  margin-top: 10px;    /* Espacio entre el estado y los botones */
+}
+
+.btn-cancelar-atencion, .btn-cobrar {
+  padding: 8px 16px;   /* Asegúrate de que ambos botones tengan el mismo padding */
+  border-radius: 15px;  /* Bordes redondeados */
+  cursor: pointer;      /* Cambiar el cursor a puntero */
+  transition: background-color 0.3s ease; /* Transición de color al pasar el ratón */
+}
+
+.btn-cobrar:hover {
+  background-color: darkgreen; /* Color al pasar el ratón */
+}
+
+.btn-cancelar-atencion:hover {
+  background-color: darkred; /* Color al pasar el ratón */
 }

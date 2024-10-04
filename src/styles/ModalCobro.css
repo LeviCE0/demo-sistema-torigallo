@@ -1,0 +1,91 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro */
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.modal-cobro {
+    max-width: 500px; /* Ancho máximo del modal */
+    width: 100%; /* Ancho completo en pantallas pequeñas */
+    background-color: #fff; /* Fondo blanco para el modal */
+    padding: 30px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra del modal */
+    position: relative; /* Para posicionar elementos dentro */
+}
+
+.modal-cobro h2 {
+    font-size: 24px; /* Tamaño de fuente del título */
+    font-weight: 600; /* Peso de la fuente */
+    margin-bottom: 20px; /* Margen inferior del título */
+}
+
+.modal-cobro label {
+    display: block; /* Hacer que las etiquetas ocupen toda la línea */
+    margin-bottom: 10px; /* Margen inferior de las etiquetas */
+}
+
+.modal-cobro input[type="text"],
+.modal-cobro input[type="number"],
+.modal-cobro input[type="date"],
+.modal-cobro select {
+    width: 100%; /* Ancho completo de los campos */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    margin-bottom: 15px; /* Margen inferior entre campos */
+    font-size: 16px; /* Tamaño de fuente de los campos */
+}
+
+.modal-cobro input[type="text"]:focus,
+.modal-cobro input[type="number"]:focus,
+.modal-cobro select:focus {
+    border-color: darkred; /* Color de borde al enfocar */
+}
+
+.modal-cobro button {
+    height: 45px; /* Altura de los botones */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    color: #fff; /* Color de texto */
+    font-size: 18px; /* Tamaño de fuente */
+    font-weight: 500; /* Peso de la fuente */
+    cursor: pointer; /* Cambiar el cursor a mano */
+    margin-top: 10px; /* Margen superior para separación */
+    background: linear-gradient(135deg, #df6a6a, #977c7c); /* Fondo del botón */
+    transition: background 0.3s ease; /* Transición de fondo */
+    width: 100%; /* Ancho completo */
+}
+
+.modal-cobro button:hover {
+    background: linear-gradient(-135deg, #df6a6a, #977c7c); /* Cambio de fondo al pasar el mouse */
+}
+
+/* Responsive media query code for mobile devices */
+@media(max-width: 500px) {
+    .modal-cobro {
+        padding: 20px; /* Reducir el padding en móviles */
+    }
+
+    .modal-cobro h2 {
+        font-size: 20px; /* Tamaño de fuente más pequeño en móviles */
+    }
+
+    .modal-cobro input[type="text"],
+    .modal-cobro input[type="number"],
+    .modal-cobro input[type="date"],
+    .modal-cobro select {
+        font-size: 14px; /* Tamaño de fuente más pequeño en móviles */
+    }
+
+    .modal-cobro button {
+        font-size: 16px; /* Tamaño de fuente más pequeño para botones */
+    }
+}

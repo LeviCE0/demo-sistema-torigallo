@@ -28,13 +28,13 @@ function Pedido() {
         setCategorias(categoriasUnicas);
       })
       .catch((error) => console.error('Error al cargar los productos:', error));
-  
+
     const pedidoGuardado = localStorage.getItem(`pedido_mesa_${id}`);
     if (pedidoGuardado) {
       setTablaProductos(JSON.parse(pedidoGuardado));
     }
   }, [id]);
-  
+
 
   const manejarCategoriaChange = (e) => {
     const categoria = e.target.value;
@@ -68,7 +68,7 @@ function Pedido() {
     if (productoSeleccionado) {
       const producto = productos.find(p => p.nombre === productoSeleccionado);
       const precio = parseFloat(producto.precio) || 0;
-  
+
       const productoEnTabla = tablaProductos.find(p => p.nombre === productoSeleccionado);
       const cantidadActual = productoEnTabla ? productoEnTabla.cantidad : 0;
 
@@ -78,7 +78,7 @@ function Pedido() {
         setShowModal(true);
         return;
       }
-  
+
       let nuevaTablaProductos;
       if (productoEnTabla) {
         nuevaTablaProductos = tablaProductos.map(p =>
@@ -87,10 +87,10 @@ function Pedido() {
             : p
         );
       } else {
-        nuevaTablaProductos = [...tablaProductos, { 
-          nombre: producto.nombre, 
-          cantidad, 
-          precio 
+        nuevaTablaProductos = [...tablaProductos, {
+          nombre: producto.nombre,
+          cantidad,
+          precio
         }];
       }
 
@@ -107,88 +107,87 @@ function Pedido() {
     setTablaProductos(nuevaTablaProductos);
     localStorage.setItem(`pedido_mesa_${id}`, JSON.stringify(nuevaTablaProductos));
   };
-  
+
   const manejarCerrar = () => {
     navigate('/gestionMesas');
   };
 
-  const manejarCobrar = () => {
-    // Validar que haya productos en la tabla
+  const guardarPedido = () => {
     if (tablaProductos.length === 0) {
-        alert('No hay productos en el pedido.');
-        return;
+      alert('No hay productos en el pedido.');
+      return;
     }
 
-    // Preparar los datos del pedido
     const productosConId = tablaProductos.map(producto => {
-        const productoData = productos.find(p => p.nombre === producto.nombre);
-        return {
-            id: productoData.id, // Asegúrate de que el producto tenga un id
-            cantidad: producto.cantidad,
-            precio: producto.precio
-        };
+      const productoData = productos.find(p => p.nombre === producto.nombre);
+      return {
+        id: productoData.id,
+        cantidad: producto.cantidad,
+        precio: producto.precio
+      };
     });
 
     const pedido = {
-        idMesa: id, // id de la mesa
-        productos: productosConId, // lista de productos seleccionados con sus IDs
-        total: tablaProductos.reduce((total, producto) => total + producto.cantidad * producto.precio, 0), // calcular el total
+      idMesa: id,
+      productos: productosConId,
+      total: tablaProductos.reduce((total, producto) => total + producto.cantidad * producto.precio, 0),
     };
 
-    // Mostrar un mensaje de carga al usuario
     setModalMessage('Guardando el pedido, por favor espere...');
     setShowModal(true);
 
-    // Guardar el pedido en la base de datos
     fetch('https://santamariahoteles.com/torigallo/backend/guardar_pedido.php', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(pedido),
     })
-    .then((response) => {
+      .then((response) => {
         if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor: ' + response.statusText);
+          throw new Error('Error en la respuesta del servidor: ' + response.statusText);
         }
         return response.json();
-    })
-    .then((data) => {
-        setShowModal(false); // Cerrar el modal de carga
-    
+      })
+      .then((data) => {
+        setShowModal(false);
         if (data.success) {
-            // Actualizar el estado de la mesa después de guardar el pedido
-            return fetch(`https://santamariahoteles.com/torigallo/backend/update_mesa_estado.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, estado: 'Atendido' }),
-            });
+          // Cambiar el estado de la mesa a 'Atendido'
+          return fetch(`https://santamariahoteles.com/torigallo/backend/update_mesa_estado.php`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, estado: 'Atendido' }),
+          });
         } else {
-            console.error('Error al guardar el pedido:', data.message); // Mostrar el mensaje de error
-            throw new Error(data.message);
+          console.error('Error al guardar el pedido:', data.message);
+          throw new Error(data.message);
         }
-    })
-    .then((response) => response.json())
-    .then((data) => {
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error al cambiar el estado de la mesa: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
         if (data.success) {
-            alert('Pedido guardado y mesa marcada como atendida.');
-            navigate('/gestionMesas');
+          alert('Pedido guardado y mesa marcada como atendida correctamente.');
+          navigate('/gestionMesas');
         } else {
-            console.error('Error al actualizar el estado de la mesa:', data.message); // Mostrar el mensaje de error
-            throw new Error(data.message);
+          throw new Error(data.message || 'Error al cambiar el estado de la mesa.');
         }
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         setShowModal(false);
         console.error('Error de red o de procesamiento:', error.message);
-        alert('Hubo un problema: ' + error.message); // Alerta con el mensaje de error
-    });  
+        alert('Hubo un problema: ' + error.message);
+      });
   };
 
-  const productosFiltrados = productos.filter(producto => 
-    producto.categoria === categoriaSeleccionada && 
+  const productosFiltrados = productos.filter(producto =>
+    producto.categoria === categoriaSeleccionada &&
     (producto.sub_categoria === subcategoriaSeleccionada || subcategoriaSeleccionada === '')
   );
 
@@ -276,7 +275,7 @@ function Pedido() {
         <button style={{ backgroundColor: 'red', color: 'white' }} onClick={manejarCerrar}>
           Cerrar
         </button>
-        <button onClick={manejarCobrar} disabled={tablaProductos.length === 0}>S/ Cobrar</button>
+        <button onClick={guardarPedido} disabled={tablaProductos.length === 0}>Guardar Pedido</button>
       </div>
 
       {showModal && (
