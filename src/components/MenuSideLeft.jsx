@@ -43,6 +43,7 @@ function MenuSideLeft({ isVisible, toggleMenu }) {
             <li><Link to="/gestionMesas">Gestión de Mesas</Link></li>
             <li><Link to="/gestionReservas">Gestión de Reservas</Link></li>
             <li><Link to="/gestionAtencion">Gestión de Atenciones</Link></li>
+            <li><Link to="/historial">Historial</Link></li>
             <li>
               <a className="logout-button" onClick={handleLogout}>
                 Cerrar Sesión

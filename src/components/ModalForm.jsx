@@ -51,7 +51,7 @@ function ModalForm({ formData, handleChange, handleSubmit, closeModalForm }) {
                             name="nombre"
                             value={formData.nombre}
                             onChange={handleFieldChange}
-                            onKeyPress={handleKeyPress} // Maneja la entrada
+                            onKeyPress={handleKeyPress}
                             required
                             pattern="[A-Za-z\s]+"
                             title="Solo se permiten letras y espacios."
@@ -66,9 +66,9 @@ function ModalForm({ formData, handleChange, handleSubmit, closeModalForm }) {
                             name="dni"
                             value={formData.dni}
                             onChange={handleFieldChange}
-                            onKeyPress={handleKeyPress} // Maneja la entrada
+                            onKeyPress={handleKeyPress}
                             required
-                            pattern="\d{1,8}" // Solo dígitos, máximo 8
+                            pattern="\d{1,8}"
                             title="Solo se permiten hasta 8 dígitos."
                         />
                     </div>
@@ -95,9 +95,9 @@ function ModalForm({ formData, handleChange, handleSubmit, closeModalForm }) {
                             name="celular"
                             value={formData.celular}
                             onChange={handleFieldChange}
-                            onKeyPress={handleKeyPress} // Maneja la entrada
+                            onKeyPress={handleKeyPress}
                             required
-                            pattern="\d{1,9}" // Solo dígitos, máximo 9
+                            pattern="\d{1,9}"
                             title="Solo se permiten hasta 9 dígitos."
                         />
                     </div>
@@ -111,6 +111,17 @@ function ModalForm({ formData, handleChange, handleSubmit, closeModalForm }) {
                             value={formData.fecha}
                             onChange={handleChange}
                             required
+                        />
+                    </div>
+
+                    <div className='form-group'>
+                    <label htmlFor="hora">Hora:</label>
+                        <input
+                            type="time"
+                            id="hora"
+                            name="hora"
+                            value={formData.hora}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -131,8 +142,8 @@ function ModalForm({ formData, handleChange, handleSubmit, closeModalForm }) {
                             value={formData.capacidad}
                             onChange={handleFieldChange}
                             required
-                            min="1" // Mínimo 1 persona
-                            max="15" // Máximo 15 personas
+                            min="1"
+                            max="15"
                         />
                     </div>
 

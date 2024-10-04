@@ -6,6 +6,7 @@ import Principal from '../pages/Principal';
 import Reservas from '../pages/GestionReservas';
 import GestionMesas from '../pages/GestionMesas';
 import GestionAtencion from '../pages/GestionAtencion';
+import Historial from '../pages/Historial';
 import ProtectedLayout from '../components/ProtectedLayout';
 import Pedido from '../pages/Pedidos';
 
@@ -26,6 +27,7 @@ function AppRoutes() {
         <Route path="/gestionMesas" element={<GestionMesas />} />
         <Route path="/gestionReservas" element={<Reservas />} />
         <Route path="/gestionAtencion" element={<GestionAtencion />} />
+        <Route path="/historial" element={<Historial />} />
         <Route path="/pedido/:id" element={<Pedido />} />
       </Route>
     </Routes>

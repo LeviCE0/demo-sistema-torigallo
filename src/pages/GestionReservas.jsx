@@ -12,6 +12,7 @@ function Reservas() {
         email: '',
         celular: '',
         fecha: '',
+        hora: '',
         turno: 'tarde',
         capacidad: '',
     });
@@ -22,7 +23,7 @@ function Reservas() {
     const [reservas, setReservas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const columns = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Turno', 'Mesas', 'Acciones'];
+    const columns = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Hora', 'Turno', 'Mesas', 'Acciones'];
 
     const handleChange = (e) => {
         setFormData({
@@ -44,6 +45,7 @@ function Reservas() {
                     fecha: formData.fecha,
                     turno: formData.turno,
                     capacidad: formData.capacidad,
+                    hora: formData.hora,
                 }),
             });
 
@@ -62,8 +64,9 @@ function Reservas() {
                             email: formData.email,
                             celular: formData.celular,
                             fecha: formData.fecha,
+                            hora: formData.hora,
                             turno: formData.turno,
-                            mesas: data.mesas.map(mesa => mesa.id), // Extraer solo los IDs de las mesas
+                            mesas: data.mesas.map(mesa => mesa.id),
                         }),
                     });
 
