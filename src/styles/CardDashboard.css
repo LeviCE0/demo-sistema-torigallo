@@ -14,7 +14,7 @@
     width: 80px;
     height: 80px;
     margin-right: 20px;
-    filter: drop-shadow(3px 3px 4px #a834346b);
+    filter: drop-shadow(3px 3px 1px #a834346b);
 }
 
 .card-content {
@@ -26,10 +26,22 @@
 .card-content h3 {
     font-size: 25px;
     margin-bottom: 5px;
-    color: darkred;
+    color: rgb(0, 0, 0);
 }
 
 .card-content p {
     font-size: 25px;
     font-weight: bold;
+}
+
+.ventas {
+    background: linear-gradient(to right, rgb(245, 245, 51), rgba(247, 247, 35, 0.5), rgba(255, 254, 173, 0.5));
+}
+
+.pedidos {
+    background: linear-gradient(to right, rgb(44, 211, 44), rgba(108, 226, 84, 0.5)), rgba(55, 254, 173, 0.5);
+}
+
+.cancelados {
+    background: linear-gradient(to right, rgb(211, 44, 44), rgba(255, 0, 0, 0.5), rgba(255, 255, 255, 0.5)); /* Gradiente rojo */
 }

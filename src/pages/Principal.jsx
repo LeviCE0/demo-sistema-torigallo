@@ -4,7 +4,7 @@ import { AuthContext } from '../components/AuthContext';
 import BarChart from '../components/BarChart';
 import PieChart from '../components/PieChart';
 import CardDashboard from '../components/CardDashboard';
-import TableProductsSales from '../components/TableProductsSales';
+import Table from '../components/Table';
 import '../styles/Principal.css';
 
 import iconVentas from '../assets/icon-ventas.png';
@@ -14,102 +14,106 @@ function Principal() {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [ventasMes, setVentasMes] = useState(0);
-  const [pedidosMes, setPedidosMes] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
-  const [animatedVentas, setAnimatedVentas] = useState(0);
-  const [animatedPedidos, setAnimatedPedidos] = useState(0);
-  const [monthlySalesData, setMonthlySalesData] = useState([]); // Para ventas por mes
-  const [monthlyOrdersCount, setMonthlyOrdersCount] = useState(0); // Para pedidos
+  const [productos, setProductos] = useState([]);
+  const [totalProductos, setTotalProductos] = useState(0);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const tamanoPagina = 10;
+  const [ventasAnimadas, setVentasAnimadas] = useState(0);
+  const [pedidosAnimados, setPedidosAnimados] = useState(0);
+  const [datosVentasMensuales, setDatosVentasMensuales] = useState([]);
+  const [conteoPedidosMensuales, setConteoPedidosMensuales] = useState(0);
+  const [haAnimado, setHaAnimado] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/');
     } else {
-      fetchMostSoldProducts();
-      fetchDashboardData();
-      fetchMonthlySalesData(); // Obtener ventas mensuales
-      fetchMonthlyOrdersCount(); // Obtener conteo de pedidos
-    }
-  }, [isAuthenticated, navigate, currentPage]);
+      obtenerProductosMasVendidos();
+      obtenerDatosVentasMensuales();
+      obtenerConteoPedidosMensuales();
 
-  const fetchMostSoldProducts = async () => {
+      if (!haAnimado) {
+        obtenerDatosDashboard();
+        setHaAnimado(true);
+      }
+    }
+  }, [isAuthenticated, navigate, paginaActual]);
+
+  const obtenerProductosMasVendidos = async () => {
     try {
-      const response = await fetch(`https://santamariahoteles.com/torigallo/backend/products_sales.php?page=${currentPage}&pageSize=${pageSize}`);
+      const response = await fetch(`https://santamariahoteles.com/torigallo/backend/products_sales.php?page=${paginaActual}&pageSize=${tamanoPagina}`);
       if (!response.ok) throw new Error('Error al obtener productos');
       const data = await response.json();
-      setProducts(data.products);
-      setTotalProducts(data.total);
+      setProductos(data.products);
+      setTotalProductos(data.total);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error obteniendo productos:', error);
     }
   };
 
-  const fetchDashboardData = async () => {
+  const obtenerDatosDashboard = async () => {
     try {
-        const response = await fetch('https://santamariahoteles.com/torigallo/backend/dashboard_data.php');
-        if (!response.ok) throw new Error('Error al obtener datos del dashboard');
-
-        const data = await response.json(); // Aquí es donde conviertes la respuesta a JSON
-        animateCount(setAnimatedVentas, data.totalVentas); // Cambia response.data a data
-        animateCount(setAnimatedPedidos, data.totalPedidos); // Cambia response.data a data
+      const response = await fetch('https://santamariahoteles.com/torigallo/backend/dashboard_data.php');
+      if (!response.ok) throw new Error('Error al obtener datos del dashboard');
+      const data = await response.json();
+      animarConteo(setVentasAnimadas, data.totalVentas);
+      animarConteo(setPedidosAnimados, data.totalPedidos);
     } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+      console.error('Error obteniendo datos del dashboard:', error);
     }
   };
 
-  const fetchMonthlySalesData = async () => {
+  const obtenerDatosVentasMensuales = async () => {
     try {
       const response = await fetch('https://santamariahoteles.com/torigallo/backend/ventas_mensuales.php');
       if (!response.ok) throw new Error('Error al obtener ventas mensuales');
       const data = await response.json();
-      setMonthlySalesData(data); // Espera un arreglo de datos para el gráfico
+      setDatosVentasMensuales(data);
     } catch (error) {
-      console.error('Error fetching monthly sales data:', error);
+      console.error('Error obteniendo ventas mensuales:', error);
     }
   };
 
-  const fetchMonthlyOrdersCount = async () => {
+  const obtenerConteoPedidosMensuales = async () => {
     try {
-        const response = await fetch('https://santamariahoteles.com/torigallo/backend/order_month.php');
-        if (!response.ok) throw new Error('Error al obtener conteo de pedidos');
-        const data = await response.json();
-        setMonthlyOrdersCount(data); // Ahora es un arreglo de objetos con mes y totalPedidos
+      const response = await fetch('https://santamariahoteles.com/torigallo/backend/order_month.php');
+      if (!response.ok) throw new Error('Error al obtener conteo de pedidos');
+      const data = await response.json();
+      setConteoPedidosMensuales(data);
     } catch (error) {
-        console.error('Error fetching monthly orders count:', error);
+      console.error('Error obteniendo conteo de pedidos:', error);
     }
   };
 
-  const animateCount = (setValue, targetValue) => {
-    let count = 0;
-    const increment = Math.ceil(targetValue / 100);
-    const interval = setInterval(() => {
-      if (count < targetValue) {
-        count += increment;
-        if (count > targetValue) count = targetValue;
-        setValue(count);
+  const animarConteo = (setValor, valorObjetivo) => {
+    let conteo = 0;
+    const incremento = Math.ceil(valorObjetivo / 100);
+    const intervalo = setInterval(() => {
+      if (conteo < valorObjetivo) {
+        conteo += incremento;
+        if (conteo > valorObjetivo) conteo = valorObjetivo;
+        setValor(conteo);
       } else {
-        clearInterval(interval);
+        clearInterval(intervalo);
       }
     }, 10);
   };
 
-  const totalPages = Math.ceil(totalProducts / pageSize);
+  const totalPaginas = Math.ceil(totalProductos / tamanoPagina);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+  const manejarSiguientePagina = () => {
+    if (paginaActual < totalPaginas) {
+      setPaginaActual(paginaActual + 1);
     }
   };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  const manejarPaginaAnterior = () => {
+    if (paginaActual > 1) {
+      setPaginaActual(paginaActual - 1);
     }
   };
+
+  const columnasProductos = ['Producto', 'Cantidad Vendida'];
 
   return (
     isAuthenticated && (
@@ -118,26 +122,26 @@ function Principal() {
           <h1>Bienvenido/a</h1>
         </div>
         <div className='cards-dashboards'>
-          <CardDashboard title="Ventas del Mes Actual" value={`$${animatedVentas}`} image={iconVentas} />
-          <CardDashboard title="Pedidos del Mes Actual" value={animatedPedidos} image={iconPedidos} />
+          <CardDashboard title="Ventas del Mes Actual" value={`$${ventasAnimadas}`} image={iconVentas} className="ventas" />
+          <CardDashboard title="Pedidos del Mes Actual" value={pedidosAnimados} image={iconPedidos} className="pedidos" />
         </div>
         <div className='table-products-container'>
           <h3>Productos Más Vendidos</h3>
-          <TableProductsSales products={products} />
+          <Table columns={columnasProductos} data={productos} /> 
           <div className="pagination">
-            <button onClick={handlePrevPage} disabled={currentPage === 1}>Anterior</button>
-            <span>Página {currentPage} de {totalPages}</span>
-            <button onClick={handleNextPage} disabled={currentPage === totalPages}>Siguiente</button>
+            <button onClick={manejarPaginaAnterior} disabled={paginaActual === 1}>Anterior</button>
+            <span>Página {paginaActual} de {totalPaginas}</span>
+            <button onClick={manejarSiguientePagina} disabled={paginaActual === totalPaginas}>Siguiente</button>
           </div>
         </div>
         <div className="charts-container">
           <div className="chart">
             <h3>Ventas del Mes (Gráfico de Barras)</h3>
-            <BarChart monthlySalesData={monthlySalesData} />
+            <BarChart monthlySalesData={datosVentasMensuales} />
           </div>
           <div className="chart">
             <h3>Cantidad de Pedidos (Gráfico Circular)</h3>
-            <PieChart ordersData={monthlyOrdersCount} />
+            <PieChart ordersData={conteoPedidosMensuales} />
           </div>
         </div>
       </div>

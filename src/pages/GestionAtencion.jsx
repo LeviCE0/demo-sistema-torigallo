@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/GestionAtencion.css';
 import CardDashboard from '../components/CardDashboard';
-import Table from '../components/Table'; // Importa tu componente de tabla
+import Table from '../components/Table';
 import iconPedidos from '../assets/icon-pedidos.png';
-import iconCancelados from '../assets/icon-cancelados.png'; // Asegúrate de tener un icono para pedidos cancelados
+import iconCancelados from '../assets/icon-cancelados.png';
 
 function GestionAtencion() {
   const [totalPedidos, setTotalPedidos] = useState(0);
   const [totalCancelados, setTotalCancelados] = useState(0);
   const [cancelaciones, setCancelaciones] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null); // Estado para manejar errores
+  const [error, setError] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -22,7 +22,7 @@ function GestionAtencion() {
       setTotalPedidos(data.totalPedidos);
     } catch (error) {
       console.error('Error en la solicitud:', error);
-      setError(error.message); // Guarda el mensaje de error
+      setError(error.message);
     }
   };
 
@@ -37,35 +37,35 @@ function GestionAtencion() {
       setCancelaciones(data);
     } catch (error) {
       console.error('Error en la solicitud de pedidos cancelados:', error);
-      setError(error.message); // Guarda el mensaje de error
+      setError(error.message);
     }
   };
 
   useEffect(() => {
     const fetchDataAsync = async () => {
-      setIsLoading(true); // Establecer isLoading en true al inicio de las solicitudes
+      setIsLoading(true);
       await fetchData();
       await fetchPedidosCancelados();
-      setIsLoading(false); // Establecer isLoading en false una vez que se han realizado las solicitudes
+      setIsLoading(false); 
     };
 
     fetchDataAsync();
   }, []);
 
-  const columns = ['id_mesa', 'comentario', 'fecha_cancelacion'];
+  const columns = ['Mesa', 'Comentario', 'Fecha De Cancelacion'];
 
   return (
     <div className="atencion-container">
       <h2 className='title-page'>Gestión de Atenciones</h2>
       {isLoading ? (
         <p>Cargando...</p>
-      ) : error ? ( // Muestra un mensaje de error si hay un error
+      ) : error ? (
         <p>Error: {error}</p>
       ) : (
         <>
           <div className='cards-dashboards'>
-            <CardDashboard title="Pedidos Totales" value={totalPedidos} image={iconPedidos} />
-            <CardDashboard title="Pedidos Cancelados" value={totalCancelados} image={iconCancelados} />
+            <CardDashboard title="Pedidos Totales" value={totalPedidos} image={iconPedidos} className="pedidos" />
+            <CardDashboard title="Pedidos Cancelados" value={totalCancelados} image={iconCancelados} className="cancelados" />
           </div>
           <h3 className="sub-title">Tabla de Cancelaciones</h3>
           <Table columns={columns} data={cancelaciones} />

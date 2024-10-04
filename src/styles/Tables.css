@@ -1,0 +1,41 @@
+.table-main {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+}
+
+.table-main thead tr {
+    background-color: #e4ad89;
+    color: #000000;
+    text-align: left;
+    font-weight: bold;
+}
+
+.table-main th,
+.table-main td {
+    padding: 12px 15px;
+}
+
+.table-main tbody tr {
+    border-bottom: 1px solid #dddddd;
+    color: #000000;
+}
+
+.table-main tbody tr:last-of-type {
+    border-bottom: 2px solid #e4ad89;
+}
+
+.table-main tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.table-main tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}

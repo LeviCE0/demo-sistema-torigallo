@@ -22,7 +22,7 @@ function Reservas() {
     const [reservas, setReservas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const columns = ['nombre', 'dni', 'email', 'celular', 'fecha', 'turno', 'mesas'];
+    const columns = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Turno', 'Mesas'];
 
     const handleChange = (e) => {
         setFormData({
