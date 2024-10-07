@@ -5,6 +5,8 @@ import BarChart from '../components/BarChart';
 import PieChart from '../components/PieChart';
 import CardDashboard from '../components/CardDashboard';
 import Table from '../components/Table';
+import CustomSelect from '../components/CustomSelect';
+import YearSelect from '../components/YearSelect';
 import '../styles/Principal.css';
 
 import iconVentas from '../assets/icon-ventas.png';
@@ -24,6 +26,9 @@ function Principal() {
   const [paginaActual, setPaginaActual] = useState(1);
   const [productosPorPagina] = useState(10);
 
+  const [mesSeleccionado, setMesSeleccionado] = useState(new Date().getMonth() + 1);
+  const [anioSeleccionado, setAnioSeleccionado] = useState(new Date().getFullYear());
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/');
@@ -31,11 +36,9 @@ function Principal() {
       if (!haCargadoGraficos) {
         obtenerDatosVentasMensuales();
         obtenerConteoPedidosMensuales();
-        obtenerProductos(); // Llamar a la función para obtener productos
+        obtenerProductos();
         setHaCargadoGraficos(true);
       }
-
-      // Animar conteo solo si no ha animado antes
       if (!haAnimado) {
         obtenerDatosDashboard();
         setHaAnimado(true);
@@ -43,13 +46,28 @@ function Principal() {
     }
   }, [isAuthenticated, navigate, haCargadoGraficos]);
 
+  useEffect(() => {
+    obtenerProductos(); // Cargar productos cada vez que cambie el mes o el año
+  }, [mesSeleccionado, anioSeleccionado]); // Dependencias
+
+  // Mueve la función filtrarProductos aquí, antes de que la utilices en el cuerpo principal
+  const filtrarProductos = () => {
+    return productos.filter(producto => {
+      const fechaVenta = new Date(producto.fechaVenta);
+      const mesProducto = fechaVenta.getMonth() + 1;
+      const anioProducto = fechaVenta.getFullYear();
+
+      return mesProducto === mesSeleccionado && anioProducto === anioSeleccionado;
+    });
+  };
+
+  const productosFiltrados = filtrarProductos();  // Ahora filtrarProductos está definida antes de ser usada
   const indiceUltimoProducto = paginaActual * productosPorPagina;
   const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
-  const productosPaginaActual = productos.slice(indicePrimerProducto, indiceUltimoProducto);
+  const productosPaginaActual = productosFiltrados.slice(indicePrimerProducto, indiceUltimoProducto);
 
   const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
-
-  const numeroPaginas = Math.ceil(productos.length / productosPorPagina);
+  const numeroPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
   const paginas = [];
 
   for (let i = 1; i <= numeroPaginas; i++) {
@@ -58,15 +76,16 @@ function Principal() {
 
   const obtenerProductos = async () => {
     try {
-      const response = await fetch('https://santamariahoteles.com/torigallo/backend/products_sales.php');
+      // Construir la URL con los parámetros mes y año
+      const response = await fetch(`https://santamariahoteles.com/torigallo/backend/products_sales.php?mes=${mesSeleccionado}&anio=${anioSeleccionado}`);
       if (!response.ok) throw new Error('Error al obtener productos');
       const data = await response.json();
-      console.log(data);
       setProductos(data.products);
     } catch (error) {
       console.error('Error obteniendo productos:', error);
     }
   };
+
 
   const obtenerDatosDashboard = async () => {
     try {
@@ -130,6 +149,10 @@ function Principal() {
         </div>
         <div className='table-products-container'>
           <h3>Productos Mas Vendidos</h3>
+          <div className="filters-container">
+            <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
+            <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
+          </div>
           <Table columns={columnasProductos} data={productosPaginaActual} />
         </div>
         <div className='pagination'>
