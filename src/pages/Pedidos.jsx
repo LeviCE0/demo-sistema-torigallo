@@ -11,8 +11,8 @@ function Pedido() {
   const [productoSeleccionado, setProductoSeleccionado] = useState('');
   const [cantidad, setCantidad] = useState(1);
   const [tablaProductos, setTablaProductos] = useState([]);
-  const [modalMessage, setModalMessage] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [mensajeModal, setMensajeModal] = useState('');
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   const [categorias, setCategorias] = useState([]);
   const [subcategorias, setSubcategorias] = useState([]);
@@ -34,7 +34,6 @@ function Pedido() {
       setTablaProductos(JSON.parse(pedidoGuardado));
     }
   }, [id]);
-
 
   const manejarCategoriaChange = (e) => {
     const categoria = e.target.value;
@@ -74,8 +73,8 @@ function Pedido() {
 
       const nuevaCantidad = Math.min(10 - cantidadActual, cantidad);
       if (nuevaCantidad <= 0) {
-        setModalMessage('No puedes agregar más de 10 unidades en total.');
-        setShowModal(true);
+        setMensajeModal('No puedes agregar más de 10 unidades en total.');
+        setMostrarModal(true);
         return;
       }
 
@@ -133,8 +132,8 @@ function Pedido() {
       total: tablaProductos.reduce((total, producto) => total + producto.cantidad * producto.precio, 0),
     };
 
-    setModalMessage('Guardando el pedido, por favor espere...');
-    setShowModal(true);
+    setMensajeModal('Guardando el pedido, por favor espere...');
+    setMostrarModal(true);
 
     fetch('https://santamariahoteles.com/torigallo/backend/guardar_pedido.php', {
       method: 'POST',
@@ -150,9 +149,8 @@ function Pedido() {
         return response.json();
       })
       .then((data) => {
-        setShowModal(false);
+        setMostrarModal(false);
         if (data.success) {
-          // Cambiar el estado de la mesa a 'Atendido'
           return fetch(`https://santamariahoteles.com/torigallo/backend/update_mesa_estado.php`, {
             method: 'POST',
             headers: {
@@ -180,7 +178,7 @@ function Pedido() {
         }
       })
       .catch((error) => {
-        setShowModal(false);
+        setMostrarModal(false);
         console.error('Error de red o de procesamiento:', error.message);
         alert('Hubo un problema: ' + error.message);
       });
@@ -278,8 +276,8 @@ function Pedido() {
         <button onClick={guardarPedido} disabled={tablaProductos.length === 0}>Guardar Pedido</button>
       </div>
 
-      {showModal && (
-        <Modal message={modalMessage} onClose={() => setShowModal(false)} />
+      {mostrarModal && (
+        <Modal message={mensajeModal} onClose={() => setMostrarModal(false)} />
       )}
     </div>
   );

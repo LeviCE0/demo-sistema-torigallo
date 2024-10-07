@@ -47,10 +47,9 @@ function Principal() {
   }, [isAuthenticated, navigate, haCargadoGraficos]);
 
   useEffect(() => {
-    obtenerProductos(); // Cargar productos cada vez que cambie el mes o el año
-  }, [mesSeleccionado, anioSeleccionado]); // Dependencias
+    obtenerProductos();
+  }, [mesSeleccionado, anioSeleccionado]);
 
-  // Mueve la función filtrarProductos aquí, antes de que la utilices en el cuerpo principal
   const filtrarProductos = () => {
     return productos.filter(producto => {
       const fechaVenta = new Date(producto.fechaVenta);
@@ -61,7 +60,7 @@ function Principal() {
     });
   };
 
-  const productosFiltrados = filtrarProductos();  // Ahora filtrarProductos está definida antes de ser usada
+  const productosFiltrados = filtrarProductos();
   const indiceUltimoProducto = paginaActual * productosPorPagina;
   const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
   const productosPaginaActual = productosFiltrados.slice(indicePrimerProducto, indiceUltimoProducto);
@@ -76,7 +75,6 @@ function Principal() {
 
   const obtenerProductos = async () => {
     try {
-      // Construir la URL con los parámetros mes y año
       const response = await fetch(`https://santamariahoteles.com/torigallo/backend/products_sales.php?mes=${mesSeleccionado}&anio=${anioSeleccionado}`);
       if (!response.ok) throw new Error('Error al obtener productos');
       const data = await response.json();
@@ -85,7 +83,6 @@ function Principal() {
       console.error('Error obteniendo productos:', error);
     }
   };
-
 
   const obtenerDatosDashboard = async () => {
     try {

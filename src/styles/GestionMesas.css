@@ -36,8 +36,9 @@
 }
 
 .mesas-grid {
-    grid-column-gap: 40px;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    grid-template-rows: 56%;
+    grid-template-rows: auto;
 }
