@@ -89,13 +89,14 @@ function GestionAtencion() {
             <CardDashboard title="Pedidos Totales" value={totalPedidos} image={iconPedidos} className="pedidos" />
             <CardDashboard title="Pedidos Cancelados" value={totalCancelados} image={iconCancelados} className="cancelados" />
           </div>
-          <h3 className="sub-title">Filtros</h3>
-          <div className="filters-container">
-            <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
-            <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
+          <div className='table-atencion-container'>
+            <h3 className="sub-title">Tabla de Cancelaciones</h3>
+            <div className="filters-container">
+              <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
+              <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
+            </div>
+            <Table columns={columns} data={filteredCancelaciones} />
           </div>
-          <h3 className="sub-title">Tabla de Cancelaciones</h3>
-          <Table columns={columns} data={filteredCancelaciones} />
         </>
       )}
     </div>
