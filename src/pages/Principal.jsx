@@ -4,7 +4,7 @@ import { AuthContext } from '../components/AuthContext';
 import BarChart from '../components/BarChart';
 import PieChart from '../components/PieChart';
 import CardDashboard from '../components/CardDashboard';
-import Table from '../components/Table'; // Importar el componente Table
+import Table from '../components/Table';
 import '../styles/Principal.css';
 
 import iconVentas from '../assets/icon-ventas.png';
@@ -14,19 +14,20 @@ function Principal() {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [productos, setProductos] = useState([]); // Estado para almacenar productos
+  const [productos, setProductos] = useState([]);
   const [ventasAnimadas, setVentasAnimadas] = useState(0);
   const [pedidosAnimados, setPedidosAnimados] = useState(0);
   const [datosVentasMensuales, setDatosVentasMensuales] = useState([]);
   const [conteoPedidosMensuales, setConteoPedidosMensuales] = useState([]);
   const [haAnimado, setHaAnimado] = useState(false);
   const [haCargadoGraficos, setHaCargadoGraficos] = useState(false);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [productosPorPagina] = useState(10);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/');
     } else {
-      // Cargar datos de productos y gráficos solo si no han sido cargados antes
       if (!haCargadoGraficos) {
         obtenerDatosVentasMensuales();
         obtenerConteoPedidosMensuales();
@@ -42,12 +43,26 @@ function Principal() {
     }
   }, [isAuthenticated, navigate, haCargadoGraficos]);
 
+  const indiceUltimoProducto = paginaActual * productosPorPagina;
+  const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
+  const productosPaginaActual = productos.slice(indicePrimerProducto, indiceUltimoProducto);
+
+  const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
+
+  const numeroPaginas = Math.ceil(productos.length / productosPorPagina);
+  const paginas = [];
+
+  for (let i = 1; i <= numeroPaginas; i++) {
+    paginas.push(i);
+  }
+
   const obtenerProductos = async () => {
     try {
       const response = await fetch('https://santamariahoteles.com/torigallo/backend/products_sales.php');
       if (!response.ok) throw new Error('Error al obtener productos');
       const data = await response.json();
-      setProductos(data.products); // Ajusta esto según la estructura de tu API
+      console.log(data);
+      setProductos(data.products);
     } catch (error) {
       console.error('Error obteniendo productos:', error);
     }
@@ -115,7 +130,14 @@ function Principal() {
         </div>
         <div className='table-products-container'>
           <h3>Productos Mas Vendidos</h3>
-          <Table columns={columnasProductos} data={productos} />
+          <Table columns={columnasProductos} data={productosPaginaActual} />
+        </div>
+        <div className='pagination'>
+          {paginas.map(numero => (
+            <button key={numero} onClick={() => cambiarPagina(numero)} className={numero === paginaActual ? 'active' : ''}>
+              {numero}
+            </button>
+          ))}
         </div>
         <div className="charts-container">
           <div className="chart">
