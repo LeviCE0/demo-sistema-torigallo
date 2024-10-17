@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Card_Mesa from '../components/Card_Mesa';
 import ModalComentario from '../components/ModalComentario';
 import ModalCobro from '../components/ModalCobro';
+import MenuSideLeft from '../components/MenuSideLeft';
 import '../styles/GestionMesas.css';
 
 function GestionMesas() {
-    const [mesas, setMesas] = useState([]);
-    const [mesasFiltradas, setMesasFiltradas] = useState([]);
+    const [mesas, setMesas] = useState([
+        { id: 1, nombre: 'Mesa 1', capacidad: 4, estado: 'Disponible' },
+        { id: 2, nombre: 'Mesa 2', capacidad: 2, estado: 'No Disponible' },
+        { id: 3, nombre: 'Mesa 3', capacidad: 6, estado: 'Reservado' },
+        { id: 4, nombre: 'Mesa 4', capacidad: 4, estado: 'Disponible' },
+        { id: 5, nombre: 'Mesa 5', capacidad: 3, estado: 'No Disponible' },
+        { id: 6, nombre: 'Mesa 6', capacidad: 5, estado: 'Reservado' },
+        { id: 7, nombre: 'Mesa 7', capacidad: 8, estado: 'Disponible' },
+    ]);
+    const [mesasFiltradas, setMesasFiltradas] = useState(mesas);
     const [filtro, setFiltro] = useState('Todas');
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarModalCobro, setMostrarModalCobro] = useState(false);
     const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
-
-    useEffect(() => {
-        fetch('https://santamariahoteles.com/torigallo/backend/get_mesas.php')
-            .then((response) => response.json())
-            .then((data) => {
-                setMesas(data);
-                setMesasFiltradas(data);
-            })
-            .catch((error) => console.error('Error al cargar las mesas:', error));
-    }, []);
+    const [isMenuVisible, setMenuVisible] = useState(true);
 
     const filtrarMesas = (estado) => {
         if (estado === 'Todas') {
@@ -38,116 +38,88 @@ function GestionMesas() {
     };
 
     const manejarCobro = (datosCobro) => {
-        if (mesaSeleccionada) {
-            fetch(`https://santamariahoteles.com/torigallo/backend/guardar_cobro.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: mesaSeleccionada, ...datosCobro }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Cobro registrado exitosamente.');
-                    setMostrarModalCobro(false);
-                } else {
-                    alert('Hubo un problema al registrar el cobro.');
-                }
-            })
-            .catch(error => console.error('Error al registrar el cobro:', error));
-        } else {
-            alert('No hay mesa seleccionada.');
-        }
+        setMostrarModalCobro(false);
     };
 
     const manejarComentarioSubmit = (comentario) => {
         setMostrarModal(false);
-
-        fetch(`https://santamariahoteles.com/torigallo/backend/cancelar_mesa.php`, {
-            method: 'POST',
-            body: JSON.stringify({ id: mesaSeleccionada, comentario }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.success) {
-                alert('Mesa cancelada exitosamente.');
-                const nuevasMesas = mesas.map(mesa =>
-                    mesa.id === mesaSeleccionada ? { ...mesa, estado: 'Disponible' } : mesa
-                );
-                setMesas(nuevasMesas);
-                setMesasFiltradas(nuevasMesas);
-            } else {
-                alert('Hubo un problema al cancelar la mesa.');
-            }
-        })
-        .catch((error) => console.error('Error al cancelar la mesa:', error));
+        const nuevasMesas = mesas.map(mesa =>
+            mesa.id === mesaSeleccionada ? { ...mesa, estado: 'Disponible' } : mesa
+        );
+        setMesas(nuevasMesas);
+        setMesasFiltradas(nuevasMesas);
+        localStorage.setItem(`estado_mesa_${mesaSeleccionada}`, JSON.stringify({ status: 'Disponible' }));
+        alert("Atención cancelada con éxito.");
     };
 
-    return (
-        <div className="gestion-mesas-container">
-            <h2>Gestión de Mesas</h2>
-            <div className="tabs">
-                <button 
-                    className={filtro === 'Todas' ? 'active-tab' : ''} 
-                    onClick={() => filtrarMesas('Todas')}
-                >
-                    Todas las Mesas
-                </button>
-                <button 
-                    className={filtro === 'Disponible' ? 'active-tab' : ''} 
-                    onClick={() => filtrarMesas('Disponible')}
-                >
-                    Mesas Disponibles
-                </button>
-                <button 
-                    className={filtro === 'No Disponible' ? 'active-tab' : ''} 
-                    onClick={() => filtrarMesas('No Disponible')}
-                >
-                    Mesas No Disponibles
-                </button>
-                <button 
-                    className={filtro === 'Reservado' ? 'active-tab' : ''} 
-                    onClick={() => filtrarMesas('Reservado')}
-                >
-                    Mesas Reservadas
-                </button>
-            </div>
 
-            <div className="mesas-grid">
-                {mesasFiltradas.length > 0 ? (
-                    mesasFiltradas.map((mesa) => (
-                        <Card_Mesa 
-                            key={mesa.id} 
-                            id={mesa.id}
-                            title={mesa.nombre} 
-                            description={`${mesa.capacidad} personas`} 
-                            status={mesa.estado}
-                            onCancel={() => manejarCancelarAtencion(mesa.id)}
-                            onCobrar={() => {
-                                setMostrarModalCobro(true);
-                                setMesaSeleccionada(mesa.id);
-                            }}
-                        />
-                    ))
-                ) : (
-                    <p>No hay mesas para mostrar.</p>
+    return (
+        <div className="gestion-mesas-layout">
+            <MenuSideLeft isVisible={isMenuVisible} toggleMenu={() => setMenuVisible(!isMenuVisible)} />
+            <div className={`gestion-mesas-container ${isMenuVisible ? 'menu-visible' : 'menu-hidden'}`}>
+                <h2>Gestión de Mesas</h2>
+                <div className="tabs">
+                    <button
+                        className={filtro === 'Todas' ? 'active-tab' : ''}
+                        onClick={() => filtrarMesas('Todas')}
+                    >
+                        Todas las Mesas
+                    </button>
+                    <button
+                        className={filtro === 'Disponible' ? 'active-tab' : ''}
+                        onClick={() => filtrarMesas('Disponible')}
+                    >
+                        Mesas Disponibles
+                    </button>
+                    <button
+                        className={filtro === 'No Disponible' ? 'active-tab' : ''}
+                        onClick={() => filtrarMesas('No Disponible')}
+                    >
+                        Mesas No Disponibles
+                    </button>
+                    <button
+                        className={filtro === 'Reservado' ? 'active-tab' : ''}
+                        onClick={() => filtrarMesas('Reservado')}
+                    >
+                        Mesas Reservadas
+                    </button>
+                </div>
+
+                <div className="mesas-grid">
+                    {mesasFiltradas.length > 0 ? (
+                        mesasFiltradas.map((mesa) => (
+                            <Card_Mesa
+                                key={mesa.id}
+                                id={mesa.id}
+                                title={mesa.nombre}
+                                description={`${mesa.capacidad} personas`}
+                                status={mesa.estado}
+                                onCancel={() => manejarCancelarAtencion(mesa.id)}
+                                onCobrar={() => {
+                                    setMostrarModalCobro(true);
+                                    setMesaSeleccionada(mesa.id);
+                                }}
+                            />
+                        ))
+                    ) : (
+                        <p>No hay mesas para mostrar.</p>
+                    )}
+                </div>
+
+                {mostrarModal && (
+                    <ModalComentario
+                        onSubmit={manejarComentarioSubmit}
+                        onClose={() => setMostrarModal(false)}
+                    />
+                )}
+
+                {mostrarModalCobro && (
+                    <ModalCobro
+                        onClose={() => setMostrarModalCobro(false)}
+                        onCobrar={manejarCobro}
+                    />
                 )}
             </div>
-
-            {mostrarModal && (
-                <ModalComentario
-                    onSubmit={manejarComentarioSubmit}
-                    onClose={() => setMostrarModal(false)}
-                />
-            )}
-
-            {mostrarModalCobro && (
-                <ModalCobro
-                    onClose={() => setMostrarModalCobro(false)}
-                    onCobrar={manejarCobro}
-                />
-            )}
         </div>
     );
 }

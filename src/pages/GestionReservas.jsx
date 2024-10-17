@@ -1,9 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/GestionReservas.css';
 import Modal from '../components/Modal';
 import ModalForm from '../components/ModalForm';
-import Loading from '../components/Loading';
 import Table from '../components/Table';
+import MenuSideLeft from '../components/MenuSideLeft'; // Importa el componente
+
+// Datos estáticos de ejemplo para las reservas
+const reservasEstaticas = [
+    {
+        id: 1,
+        nombre: 'Juan Pérez',
+        dni: '12345678',
+        email: 'juan@gmail.com',
+        celular: '987654321',
+        fecha: '2024-10-20',
+        hora: '19:00',
+        turno: 'tarde',
+        capacidad: 4,
+    },
+    {
+        id: 2,
+        nombre: 'María López',
+        dni: '87654321',
+        email: 'maria@hotmail.com',
+        celular: '987123456',
+        fecha: '2024-10-21',
+        hora: '20:00',
+        turno: 'noche',
+        capacidad: 2,
+    },
+    // Puedes agregar más reservas aquí
+];
 
 function Reservas() {
     const [datosFormulario, setDatosFormulario] = useState({
@@ -20,10 +47,9 @@ function Reservas() {
     const [mensajeModal, setMensajeModal] = useState('');
     const [mostrarMensajeModal, setMostrarMensajeModal] = useState(false);
     const [mostrarModalFormulario, setMostrarModalFormulario] = useState(false);
-    const [reservas, setReservas] = useState([]);
-    const [cargando, setCargando] = useState(true);
+    const [reservas, setReservas] = useState(reservasEstaticas); // Usar datos estáticos
 
-    const columnas = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Hora', 'Turno', 'Mesas', 'Acciones'];
+    const columnas = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Hora', 'Turno', 'Capacidad', 'Acciones'];
 
     const manejarCambio = (e) => {
         setDatosFormulario({
@@ -32,64 +58,19 @@ function Reservas() {
         });
     };
 
-    const manejarEnvio = async (e) => {
+    const manejarEnvio = (e) => {
         e.preventDefault();
 
-        try {
-            const respuesta = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/verify_mesas.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fecha: datosFormulario.fecha,
-                    turno: datosFormulario.turno,
-                    capacidad: datosFormulario.capacidad,
-                    hora: datosFormulario.hora,
-                }),
-            });
+        // Agregar la nueva reserva a los datos estáticos
+        const nuevaReserva = {
+            id: reservas.length + 1, // Generar un nuevo ID
+            ...datosFormulario,
+        };
 
-            if (respuesta.ok) {
-                const data = await respuesta.json();
-
-                if (data.success && data.mesas.length > 0) {
-                    const respuestaReserva = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/create_reservas.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            nombre: datosFormulario.nombre,
-                            dni: datosFormulario.dni,
-                            email: datosFormulario.email,
-                            celular: datosFormulario.celular,
-                            fecha: datosFormulario.fecha,
-                            hora: datosFormulario.hora,
-                            turno: datosFormulario.turno,
-                            mesas: data.mesas.map(mesa => mesa.id),
-                        }),
-                    });
-
-                    if (respuestaReserva.ok) {
-                        const datosReserva = await respuestaReserva.json();
-                        setMensajeModal(datosReserva.success ? 'Reserva creada exitosamente' : 'Error al crear la reserva');
-                        fetchReservas();
-                    } else {
-                        setMensajeModal('Error: No se pudo crear la reserva.');
-                    }
-                } else {
-                    setMensajeModal('Error: No hay suficientes mesas disponibles.');
-                }
-            } else {
-                setMensajeModal('Error al verificar la disponibilidad de mesas.');
-            }
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
-            setMensajeModal('Error en la solicitud. Verifique la consola.');
-        }
-
+        setReservas([...reservas, nuevaReserva]);
+        setMensajeModal('Reserva creada exitosamente');
         setMostrarMensajeModal(true);
-        setMostrarModalFormulario(false);
+        cerrarModalFormulario();
     };
 
     const cerrarMensajeModal = () => {
@@ -104,82 +85,44 @@ function Reservas() {
             email: '',
             celular: '',
             fecha: '',
+            hora: '',
             turno: 'tarde',
-            capacidad: ''
+            capacidad: '',
         });
         setMostrarModalFormulario(false);
     };
 
-    const fetchReservas = async () => {
-        setCargando(true);
-        try {
-            const respuesta = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/get_reservas.php');
-            if (respuesta.ok) {
-                const data = await respuesta.json();
-                setReservas(data.reservas);
-            } else {
-                console.error('Error al obtener reservas');
-            }
-        } catch (error) {
-            console.error('Error en la solicitud de reservas:', error);
-        }
-        setCargando(false);
-    };
-
-    const manejarEliminar = async (idReserva) => {
-        try {
-            const respuesta = await fetch('https://santamariahoteles.com/torigallo/backend/reservas/delete_reserva.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ reserva_id: idReserva }),
-            });
-
-            if (respuesta.ok) {
-                const data = await respuesta.json();
-                if (data.success) {
-                    setMensajeModal('Reserva eliminada exitosamente');
-                    fetchReservas();
-                } else {
-                    setMensajeModal('Error al eliminar la reserva');
-                }
-            } else {
-                setMensajeModal('Error: No se pudo eliminar la reserva.');
-            }
-        } catch (error) {
-            console.error("Error en la solicitud de eliminación:", error);
-            setMensajeModal('Error en la solicitud de eliminación.');
-        }
-
+    const manejarEliminar = (idReserva) => {
+        setReservas(reservas.filter(reserva => reserva.id !== idReserva));
+        setMensajeModal('Reserva eliminada exitosamente');
         setMostrarMensajeModal(true);
     };
 
-    useEffect(() => {
-        fetchReservas();
-    }, []);
-
     return (
         <div className="reservas-container">
+            <MenuSideLeft /> {/* Agrega el componente del menú lateral */}
             <h2>Gestión de Reservas</h2>
-            {cargando ? (
-                <Loading />
-            ) : (
-                <Table 
-                    columns={columnas} 
-                    data={reservas.map(reserva => ({
-                        ...reserva,
-                        Acciones: (
-                            <button 
-                                className="delete-button" 
-                                onClick={() => manejarEliminar(reserva.id)}
-                            >
-                                Eliminar
-                            </button>
-                        )
-                    }))}
-                />
-            )}
+            <Table 
+                columns={columnas} 
+                data={reservas.map(reserva => ({
+                    Nombre: reserva.nombre,
+                    Dni: reserva.dni,
+                    Email: reserva.email,
+                    Celular: reserva.celular,
+                    Fecha: reserva.fecha,
+                    Hora: reserva.hora,
+                    Turno: reserva.turno,
+                    Capacidad: reserva.capacidad,
+                    Acciones: (
+                        <button 
+                            className="delete-button" 
+                            onClick={() => manejarEliminar(reserva.id)}
+                        >
+                            Eliminar
+                        </button>
+                    ),
+                }))}
+            />
 
             <button className="reservar-button" onClick={() => setMostrarModalFormulario(true)}>Crear Reserva</button>
 

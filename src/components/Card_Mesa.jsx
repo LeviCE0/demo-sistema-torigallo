@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Card.css';
 
-function Card_Mesa({ id, title, description, status, onCancel, onCobrar }) {
+function Card_Mesa({ id, title, description, onCancel, onCobrar }) {
     const navigate = useNavigate();
+    const [status, setStatus] = useState('Disponible'); // Estado inicial
+
+    useEffect(() => {
+        const estadoMesa = localStorage.getItem(`estado_mesa_${id}`);
+        if (estadoMesa) {
+            const { status } = JSON.parse(estadoMesa);
+            setStatus(status);
+        }
+    }, [id]);
 
     const handleAtender = () => {
         navigate(`/pedido/${id}`);

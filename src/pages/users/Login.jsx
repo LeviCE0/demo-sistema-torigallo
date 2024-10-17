@@ -1,40 +1,19 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import './Login.css';
 import Logo from "../../assets/logo_torigallo.png";
-import { AuthContext } from '../../components/AuthContext'; // Importar el AuthContext
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { login } = useContext(AuthContext); // Obtener la función login del contexto
+  const navigate = useNavigate(); // Inicializar el hook useNavigate
 
   // Manejar el submit del formulario
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault(); // Evitar que el formulario recargue la página
 
-    try {
-      const response = await fetch('https://santamariahoteles.com/torigallo/backend/login_user.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        login(data.token); // Usar la función login para autenticar
-      } else {
-        setErrorMessage(data.message); // Mostrar mensaje de error si el login falla
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      setErrorMessage('Hubo un problema con el servidor.'); // Mensaje de error para fallos del servidor
-    }
+    // Simular inicio de sesión exitoso sin necesidad de credenciales
+    setErrorMessage(''); // Limpiar mensajes de error
+    navigate('/principal'); // Redirigir a la página principal
   };
 
   return (
@@ -47,17 +26,13 @@ function Login() {
           <form onSubmit={handleSubmit}>
             <input
               type="email"
-              placeholder="Correo"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required // Requerido para evitar envíos vacíos
+              placeholder="Correo (opcional)"
+              // Eliminar valor y onChange para que no se necesiten credenciales
             />
             <input
               type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required // Requerido para evitar envíos vacíos
+              placeholder="Contraseña (opcional)"
+              // Eliminar valor y onChange para que no se necesiten credenciales
             />
             <button type="submit">Ingresar</button>
           </form>
