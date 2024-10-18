@@ -2,61 +2,39 @@ import React, { useEffect, useState } from 'react';
 import '../styles/GestionAtencion.css';
 import CardDashboard from '../components/CardDashboard';
 import Table from '../components/Table';
+import MenuSideLeft from '../components/MenuSideLeft'; // Importa el componente del menú lateral
 import iconPedidos from '../assets/icon-pedidos.png';
 import iconCancelados from '../assets/icon-cancelados.png';
 import CustomSelect from '../components/CustomSelect'; 
 import YearSelect from '../components/YearSelect'; 
 
+// Datos estáticos para reemplazar el uso de APIs
+const pedidosCanceladosEstaticos = [
+  {
+    Mesa: '1',
+    Comentario: 'Cliente canceló por demora en el servicio',
+    "Fecha De Cancelacion": '2024-10-15',
+  },
+  {
+    Mesa: '3',
+    Comentario: 'Cancelación por cambio de planes',
+    "Fecha De Cancelacion": '2024-09-25',
+  },
+  {
+    Mesa: '5',
+    Comentario: 'Cliente no llegó a la hora programada',
+    "Fecha De Cancelacion": '2024-10-10',
+  },
+];
+
 function GestionAtencion() {
-  const [totalPedidos, setTotalPedidos] = useState(0);
-  const [totalCancelados, setTotalCancelados] = useState(0);
-  const [cancelaciones, setCancelaciones] = useState([]);
-  const [cancelacionesFiltradas, setCancelacionesFiltradas] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
+  const [totalPedidos, setTotalPedidos] = useState(120); // Ejemplo de número estático de pedidos
+  const [totalCancelados, setTotalCancelados] = useState(pedidosCanceladosEstaticos.length); // Total de cancelados estáticos
+  const [cancelaciones, setCancelaciones] = useState(pedidosCanceladosEstaticos); // Datos estáticos de cancelaciones
+  const [cancelacionesFiltradas, setCancelacionesFiltradas] = useState(pedidosCanceladosEstaticos);
   const [mesSeleccionado, setMesSeleccionado] = useState(new Date().getMonth() + 1);
   const [anioSeleccionado, setAnioSeleccionado] = useState(new Date().getFullYear());
-
-  const obtenerDatos = async () => {
-    try {
-      const respuesta = await fetch('https://santamariahoteles.com/torigallo/backend/dashboard_data.php');
-      if (!respuesta.ok) {
-        throw new Error('Error al obtener datos del dashboard');
-      }
-      const data = await respuesta.json();
-      setTotalPedidos(data.totalPedidos);
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
-      setError(error.message);
-    }
-  };
-
-  const obtenerPedidosCancelados = async () => {
-    try {
-      const respuesta = await fetch('https://santamariahoteles.com/torigallo/backend/order_cancel.php');
-      if (!respuesta.ok) {
-        throw new Error('Error al obtener pedidos cancelados');
-      }
-      const data = await respuesta.json();
-      setTotalCancelados(data.length);
-      setCancelaciones(data);
-      setCancelacionesFiltradas(data);
-    } catch (error) {
-      console.error('Error en la solicitud de pedidos cancelados:', error);
-      setError(error.message);
-    }
-  };
-
-  useEffect(() => {
-    const obtenerDatosAsync = async () => {
-      setCargando(true);
-      await obtenerDatos();
-      await obtenerPedidosCancelados();
-      setCargando(false);
-    };
-
-    obtenerDatosAsync();
-  }, []);
+  const [isMenuVisible, setIsMenuVisible] = useState(false); // Estado para el menú lateral
 
   useEffect(() => {
     const filtrarCancelaciones = () => {
@@ -76,28 +54,24 @@ function GestionAtencion() {
   const columnas = ['Mesa', 'Comentario', 'Fecha De Cancelacion'];
 
   return (
-    <div className="atencion-container">
+    <div className={`atencion-container ${isMenuVisible ? 'menu-visible' : 'menu-hidden'}`}>
+      <MenuSideLeft 
+        isVisible={isMenuVisible} 
+        toggleMenu={() => setIsMenuVisible(!isMenuVisible)} 
+      />
       <h2 className='title-page'>Gestión de Atenciones</h2>
-      {cargando ? (
-        <p>Cargando...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : (
-        <>
-          <div className='cards-dashboards'>
-            <CardDashboard title="Pedidos Totales" value={totalPedidos} image={iconPedidos} className="pedidos" />
-            <CardDashboard title="Pedidos Cancelados" value={totalCancelados} image={iconCancelados} className="cancelados" />
-          </div>
-          <div className='table-atencion-container'>
-            <h3 className="sub-title">Tabla de Cancelaciones</h3>
-            <div className="filters-container">
-              <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
-              <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
-            </div>
-            <Table columns={columnas} data={cancelacionesFiltradas} />
-          </div>
-        </>
-      )}
+      <div className='cards-dashboards'>
+        <CardDashboard title="Pedidos Totales" value={totalPedidos} image={iconPedidos} className="pedidos" />
+        <CardDashboard title="Pedidos Cancelados" value={totalCancelados} image={iconCancelados} className="cancelados" />
+      </div>
+      <div className='table-atencion-container'>
+        <h3 className="sub-title">Tabla de Cancelaciones</h3>
+        <div className="filters-container">
+          <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
+          <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
+        </div>
+        <Table columns={columnas} data={cancelacionesFiltradas} />
+      </div>
     </div>
   );
 }

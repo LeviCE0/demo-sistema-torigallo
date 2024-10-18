@@ -140,8 +140,12 @@ function Principal() {
       <div className='table-products-container'>
         <h3>Productos Más Vendidos</h3>
         <div className="filters-container">
-          <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
-          <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
+          <div>
+            <CustomSelect selectedMonth={mesSeleccionado} onChange={setMesSeleccionado} />
+          </div>
+          <div>
+            <YearSelect selectedYear={anioSeleccionado} onChange={setAnioSeleccionado} />
+          </div>
         </div>
         <Table columns={columnasProductos} data={productosPaginaActual} />
       </div>

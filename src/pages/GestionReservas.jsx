@@ -49,6 +49,8 @@ function Reservas() {
     const [mostrarModalFormulario, setMostrarModalFormulario] = useState(false);
     const [reservas, setReservas] = useState(reservasEstaticas); // Usar datos estáticos
 
+    const [isMenuVisible, setIsMenuVisible] = useState(false); // Estado para el menú lateral
+
     const columnas = ['Nombre', 'Dni', 'Email', 'Celular', 'Fecha', 'Hora', 'Turno', 'Capacidad', 'Acciones'];
 
     const manejarCambio = (e) => {
@@ -99,8 +101,11 @@ function Reservas() {
     };
 
     return (
-        <div className="reservas-container">
-            <MenuSideLeft /> {/* Agrega el componente del menú lateral */}
+        <div className={`reservas-container ${isMenuVisible ? 'menu-visible' : 'menu-hidden'}`}>
+            <MenuSideLeft 
+                isVisible={isMenuVisible} 
+                toggleMenu={() => setIsMenuVisible(!isMenuVisible)} 
+            />
             <h2>Gestión de Reservas</h2>
             <Table 
                 columns={columnas} 
@@ -123,9 +128,9 @@ function Reservas() {
                     ),
                 }))}
             />
-
+    
             <button className="reservar-button" onClick={() => setMostrarModalFormulario(true)}>Crear Reserva</button>
-
+    
             {mostrarModalFormulario && (
                 <ModalForm
                     formData={datosFormulario}
@@ -134,12 +139,13 @@ function Reservas() {
                     closeModalForm={cerrarModalFormulario}
                 />
             )}
-
+    
             {mostrarMensajeModal && (
                 <Modal message={mensajeModal} onClose={cerrarMensajeModal} />
             )}
         </div>
     );
+    
 }
 
 export default Reservas;

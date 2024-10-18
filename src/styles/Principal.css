@@ -43,12 +43,15 @@
 
 .filters-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
+    flex-direction: column; /* Apila verticalmente */
+    gap: 10px; /* Espaciado entre los selects */
+    width: 100%; /* Asegúrate de que ocupe el ancho completo */
+  }
+  
+  /* Estilo para los selects */
+  .filters-container > div {
+    width: 100%; /* Asegúrate de que ocupen el 100% de su contenedor */
+  }
 
 h3 {
     font-size: 25px;

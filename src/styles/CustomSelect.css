@@ -1,10 +1,10 @@
 .custom-select {
   position: relative;
-  width: 400px;
-  max-width: 100%;
+  width: 100%; /* Cambia a 100% para que ocupe el ancho de su contenedor */
+  max-width: 400px; /* Puedes mantener el max-width si lo deseas */
   font-size: 1.15rem;
   color: #000;
-  margin-top: 3rem;
+  margin-top: 1rem; /* Reduce el margen superior si es necesario */
 }
 
 .select-button {
