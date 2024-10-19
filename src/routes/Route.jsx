@@ -11,7 +11,7 @@ import Pedido from '../pages/Pedidos';
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/demo-sistema-torigallo" element={<Login />} />
       <Route path="/principal" element={<Principal />} />
       <Route path="/gestionMesas" element={<GestionMesas />} />
       <Route path="/gestionReservas" element={<Reservas />} />

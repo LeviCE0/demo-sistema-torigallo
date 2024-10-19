@@ -22,7 +22,6 @@ function Login() {
         <div className="login-box">
           <img src={Logo} alt="Logo" className='logo' />
           <h1>Iniciar Sesión</h1>
-          {/* Usar form en lugar de div */}
           <form onSubmit={handleSubmit}>
             <input
               type="email"

@@ -1,40 +1,38 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';  
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/menusideleft.css';
 import Logo from "../assets/logo_torigallo.png";
 import closeMenuIcon from "../assets/close-menu.png";
 import openMenuIcon from "../assets/open-menu.png";
 
 function MenuSideLeft({ isVisible, toggleMenu }) {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('authTokenExpiration');
-  
+
     for (let key in localStorage) {
       if (key.startsWith('pedido_mesa_')) {
         localStorage.removeItem(key);
       }
     }
-  
-    navigate('/');
+
+    navigate('/demo-sistema-torigallo');
     window.location.reload();
   };
 
   return (
     <>
       <button className={`menu-toggle-button ${isVisible ? 'is-x' : 'is-hamburger'}`} onClick={toggleMenu}>
-        <img 
-          src={isVisible ? closeMenuIcon : openMenuIcon} 
-          alt={isVisible ? "Cerrar menú" : "Abrir menú"} 
-          width="24" 
-          height="24" 
+        <img
+          src={isVisible ? closeMenuIcon : openMenuIcon}
+          alt={isVisible ? "Cerrar menú" : "Abrir menú"}
+          width="24"
+          height="24"
         />
       </button>
 
       <aside className={`menu-side-left ${isVisible ? 'visible' : 'hidden'}`}>
-        <div className="logo-head"> 
+        <div className="logo-head">
           <img src={Logo} alt="Logo" className='logo' />
         </div>
         <nav className="navbar">
